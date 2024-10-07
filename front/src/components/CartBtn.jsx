@@ -44,3 +44,5 @@ export const CartBtn = ({product, qty = 1}) => {
         <i className={`fas ${loading ? 'fa-spinner fa-spin' : 'fas fa-cart-plus me-2' } me-2`}></i>Add to cart
     </button>
 }
+
+// cart button
