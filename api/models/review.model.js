@@ -1,30 +1,35 @@
-const { Schema, model } = require('mongoose')
+const { Schema, model } = require("mongoose");
 
-const Review = model('Review', new Schema({
-    product_id: {
+const Review = model(
+  "Review",
+  new Schema(
+    {
+      product_id: {
         type: Schema.Types.ObjectId,
         required: true,
-        'ref': 'products'
-    },
-    user_id: {
+        ref: "products",
+      },
+      user_id: {
         type: Schema.Types.ObjectId,
         required: true,
-        'ref': 'users'
-    },
-    comment: {
+        ref: "users",
+      },
+      comment: {
         type: String,
         required: true,
-    },
-    rating: {
+      },
+      rating: {
         type: Number,
-        required: true,
         min: 1,
-        max: 5
+        max: 5,
+      },
+    },
+    {
+      autoCreate: true,
+      autoIndex: true,
+      timestamps: true,
     }
-}, {
-    timestamps: true,
-    autoIndex: true,
-    autoCreate: true,
-}))
+  )
+);
 
-module.exports = Review
+module.exports = Review;

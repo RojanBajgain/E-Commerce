@@ -1,20 +1,26 @@
-const { Schema, model } = require('mongoose')
+const { Schema, model } = require("mongoose");
 
-const Order = model('Order', new Schema({
-    user_id: {
+const Order = model(
+  "Order",
+  new Schema(
+    {
+      user_id: {
         type: Schema.Types.ObjectId,
         required: true,
-        'ref': 'users'
-    },
-    status: {
+        ref: "users",
+      },
+      status: {
         type: String,
-        enum: ['Processing', 'Confirmed', 'Shipping', 'Delivered'],
-        default: 'Processing'
+        enum: ["Processing", "Confirmed", "Shipping", "Delivered"],
+        default: "Processing",
+      },
+    },
+    {
+      autoCreate: true,
+      autoIndex: true,
+      timestamps: true,
     }
-}, {
-    timestamps: true,
-    autoCreate: true,
-    autoIndex: true,
-}))
+  )
+);
 
-module.exports = Order
+module.exports = Order;

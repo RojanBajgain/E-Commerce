@@ -1,7 +1,17 @@
-const Staffs = require('./staffs.controller')
-const Customers = require('./customers.controller')
-const Categories = require('./categories.controller')
-const Brands = require('./brands.controller')
-const Products = require('./products.controller')
+const Staff = require("./staff.controller");
+const Brand = require("./brand.controller");
+const Category = require("./categories.controller");
+const Product = require("./products.controller");
+const Review = require("./review.controller");
+const Order = require("./order.controller");
+const Customer = require("./customer.controller");
 
-module.exports = { Staffs, Customers, Categories, Brands, Products }
+module.exports = {
+  Staff,
+  Brand,
+  Category,
+  Product,
+  Review,
+  Customer,
+  Order,
+};

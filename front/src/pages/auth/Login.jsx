@@ -1,67 +1,96 @@
-import { useState } from "react"
-import { FormField, SubmitBtn } from "../../components"
-import { inStorage, setInForm } from "../../lib"
-import { useNavigate } from "react-router-dom"
-import http from "../../http"
-import { useDispatch } from "react-redux"
-import { setUser } from "../../store"
+import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { FormField, SubmitBtn } from "../../components";
+import http from "../../http";
+import { inStorage, setInForm } from "../../lib";
+import { setUser } from "../../store/user.slice";
 
 export const Login = () => {
-    const [form, setForm] = useState({})
-    const [remember, setRemember] = useState(false)
-    const [loading, setLoading] = useState(false)
+  const [form, setForm] = useState({});
+  const [loading, setLoading] = useState(false);
+  const [remember, setRemember] = useState(false);
 
-    const dispatch = useDispatch()
-    const navigate = useNavigate()
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
-    const handleSubmit = ev => {
-        ev.preventDefault()
-        setLoading(true)
+  const handleSubmit = ev => {
+    ev.preventDefault();
+    setLoading(true);
+    http
+      .post("auth/login", form)
+      .then(({ data }) => {
+        dispatch(setUser(data.user));
+        inStorage("fronttoken", data.token, remember);
+        navigate("/");
+      })
+      .catch(err => {})
+      .finally(() => setLoading(false));
+  };
 
-        http.post('auth/login', form)
-            .then(({data}) => {
-                dispatch(setUser(data.user))
-                inStorage('12fronttoken', data.token, remember)
-                navigate('/')
-            })
-            .catch(err => {})
-            .finally(() => setLoading(false))
-    }
-
-    return <div className="col-12">
-    <div className="row">
+  return (
+    <div className="col-12">
+      {/* <!-- Main Content --> */}
+      <div className="row">
         <div className="col-12 mt-3 text-center text-uppercase">
-            <h2>Login</h2>
+          <h2>Login</h2>
         </div>
-    </div>
+      </div>
 
-    <main className="row">
+      <main className="row">
         <div className="col-lg-4 col-md-6 col-sm-8 mx-auto bg-white py-3 mb-4">
-            <div className="row">
-                <div className="col-12">
-                    <form onSubmit={handleSubmit}>
+          <div className="row">
+            <div className="col-12">
+              <form onSubmit={handleSubmit}>
+                <FormField title="email" label="Email">
+                  <input
+                    type="email"
+                    name="email"
+                    id="email"
+                    className="form-control"
+                    required
+                    onChange={ev => {
+                      setInForm(ev, form, setForm);
+                    }}
+                  />
+                </FormField>
+                <FormField title="password" label="Password">
+                  <input
+                    type="password"
+                    name="password"
+                    id="password"
+                    className="form-control"
+                    required
+                    onChange={ev => {
+                      setInForm(ev, form, setForm);
+                    }}
+                  />
+                </FormField>
 
-                        <FormField title="email" label="Email">
-                            <input type="email" id="email" name="email" className="form-control" required onChange={ev => setInForm(ev, form, setForm)} />
-                        </FormField>
-
-                        <FormField title="password" label="Password">
-                            <input type="password" id="password" name="password" className="form-control" required onChange={ev => setInForm(ev, form, setForm)}/>
-                        </FormField>
-
-                            <div className="form-check">
-                                <input type="checkbox" id="remember" className="form-check-input" checked={remember} onChange={() => setRemember(!remember)} />
-                                <label htmlFor="remember" className="form-check-label ml-2">Remember Me</label>
-                            </div>
-
-                        <div className="form-group">
-                            <SubmitBtn label="Login" icon="fa-sign-in-alt" loading={loading} />
-                        </div>
-                    </form>
+                <div className="mb-3 form-check">
+                  <input
+                    type="checkbox"
+                    id="remember"
+                    className="form-check-input"
+                    defaultChecked={remember}
+                    onClick={() => setRemember(!remember)}
+                  />
+                  <label htmlFor="remember" className="form-check-label ml-2">
+                    Remember Me
+                  </label>
                 </div>
-            </div>
-        </div>
 
-    </main>
-</div>
-}
+                <div className="form-group">
+                  <SubmitBtn
+                    label="Login"
+                    icon="fa-sign-in-alt"
+                    loading={loading}></SubmitBtn>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  );
+};
