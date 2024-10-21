@@ -1,48 +1,49 @@
-import { useDispatch, useSelector } from "react-redux"
-import { setCart } from "../store"
-import { toast } from "react-toastify"
-import { useState } from "react"
+import { useDispatch, useSelector } from "react-redux";
+import { setCart } from "../store";
+import { toast } from "react-toastify";
+import { useState } from "react";
 
-export const CartBtn = ({product, qty = 1}) => {
-    const cart = useSelector(state => state.cart.value)
+export const CartBtn = ({ product, qty = 1 }) => {
+  const cart = useSelector(state => state.cart.value);
+  const [loading, setLoading] = useState(false);
+  const dispatch = useDispatch();
 
-    const [loading, setLoading] = useState(false)
+  const handleCart = () => {
+    setLoading(true);
+    const id = product._id;
+    const price =
+      product.discounted_price > 0 ? product.discounted_price : product.price;
+    let total = price * qty;
+    let newQty = qty;
 
-    const dispatch = useDispatch()
-
-    const handleCart = () => {
-        setLoading(true)
-        let id = product._id
-
-        let price = product.discounted_price > 0 ? product.discounted_price : product.price
-
-        let qt = qty
-        let total = price * qty
-
-        if(id in cart) {
-            qty += cart[id]['qty']
-            total += price * qt
-        }
-
-        dispatch(setCart({
-            ...cart,
-            [id]: {
-                product,
-                qty: qt,
-                total,
-                price,
-            }
-        }))
-
-        setLoading(false)
-
-        toast.success("product added to cart.")
-
+    if (id in cart) {
+      // Product already in cart, update quantity and total
+      newQty += cart[id]["qty"];
+      total = price * newQty;
     }
 
-    return <button className="btn btn-outline-dark" type="button" onClick={handleCart}>
-        <i className={`fas ${loading ? 'fa-spinner fa-spin' : 'fas fa-cart-plus me-2' } me-2`}></i>Add to cart
-    </button>
-}
+    const updatedCart = {
+      ...cart,
+      [id]: {
+        product,
+        qty: newQty,
+        total,
+        price,
+      },
+    };
 
-// cart button
+    dispatch(setCart(updatedCart));
+    setLoading(false);
+    toast.success("Product added to cart");
+  };
+
+  return (
+    <button className="btn btn-outline-dark" type="button" onClick={handleCart}>
+      <i
+        className={`fas ${
+          loading ? "fa-spinner fa-spin" : "fa-cart-plus"
+        } me-2`}></i>
+      Add To Cart
+    </button>
+  );
+};

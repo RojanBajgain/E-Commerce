@@ -1,67 +1,64 @@
-const { showError } = require("../../lib")
-const { Category } = require("../../models")
+const { showError } = require("../../lib");
+const { Category } = require("../../models");
 
-class CategoriesController {
-    index = async (req, res, next) => {
-        try {
-            const categories = await Category.find()
-
-            res.json(categories)
-        } catch (err) {
-            showError(err, next)
-        }
+class CategoryController {
+  index = async (req, res, next) => {
+    try {
+      const categories = await Category.find();
+      res.json(categories);
+    } catch (error) {
+      showError(error, next);
     }
+  };
 
-    store = async (req, res, next) => {
-        try {
-            const { name, status} = req.body
-
-            await Category.create({name, status})
-
-            res.json({
-                success: "Category Added."
-            })
-        } catch (err) {
-            showError(err, next)
-        }
+  store = async (req, res, next) => {
+    try {
+      const { name, status } = req.body;
+      await Category.create({
+        name,
+        status,
+      });
+      res.json({
+        success: `Category created`,
+      });
+    } catch (error) {
+      showError(error, next);
     }
+  };
 
-    show = async (req, res, next) => {
-        try {
-            const category = await Category.findById(req.params.id)
-
-            res.json(category)
-        } catch (err) {
-            showError(err, next)
-        }
+  show = async (req, res, next) => {
+    const category = await Category.findById(req.params.id);
+    res.json(category);
+    try {
+    } catch (error) {
+      showError(error, next);
     }
+  };
 
-    update = async (req, res, next) => {
-        try {
-            const { name, status} = req.body
-
-            await Category.findByIdAndUpdate(req.params.id, {name, status})
-
-            res.json({
-                success: "Category Upadated."
-            })
-        } catch (err) {
-            showError(err, next)
-        }
+  update = async (req, res, next) => {
+    try {
+      const { name, status } = req.body;
+      await Category.findByIdAndUpdate(req.params.id, {
+        name,
+        status,
+      });
+      res.json({
+        success: `Category Updated`,
+      });
+    } catch (error) {
+      showError(error, next);
     }
-
-    destroy = async (req, res, next) => {
-        try {
-            await Category.findByIdAndDelete(req.params.id)
-
-            res.json({
-                success: "Category Removed."
-            })
-        } catch (err) {
-            showError(err, next)
-        }
+  };
+  destroy = async (req, res, next) => {
+    try {
+      await Category.findByIdAndDelete(req.params.id);
+      res.json({
+        success: "Category removed",
+      });
+    } catch (error) {
+      showError(error, next);
     }
-    }
+  };
+}
 
-
-module.exports = new CategoriesController
+module.exports = new CategoryController();

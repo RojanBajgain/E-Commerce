@@ -7,6 +7,7 @@ import * as Errors from "./errors"
 import * as Categories from "./categories"
 import * as Brands from "./brands"
 import * as Products from "./products"
-// import { List as Orders } from "./orders/List"
+import { List as Orders } from "./orders/List"
+import { List as Reviews } from "./reviews/List"
 
-export { List as Dashboard, Login, Profile, Staffs, Customers, Errors, Categories, Brands, Products }
+export { List as Dashboard, Login, Profile, Staffs, Customers, Errors, Categories, Brands, Products, Reviews, Orders }

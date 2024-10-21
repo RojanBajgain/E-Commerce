@@ -1,21 +1,21 @@
-const express = require('express')
-const staffsRoutes = require('./staffs.routes')
-const customersRoutes = require('./customers.routes')
-const categoriesRoutes = require('./categories.routes')
-const brandsRoutes = require('./brands.routes')
-const productsRoutes = require('./products.routes')
-const { adminOnly } = require('../../lib')
+const express = require("express");
+const router = express.Router();
+const staffRoute = require("./staff.route");
+const brandRoute = require("./brand.route");
+const categoryRoute = require("./category.route");
+const productRoute = require("./product.route");
+const orderRoute = require("./order.route");
+const reviewRoute = require("./review.route");
+const customerRoute = require("./customer.route");
+const { adminOnly } = require("../../middleware");
 
-const router = express.Router()
+router.use("/staffs", adminOnly, staffRoute);
+router.use("/brands", brandRoute);
+router.use("/categories", categoryRoute);
+router.use("/orders", orderRoute);
+router.use("/customers", customerRoute);
+router.use("/reviews", reviewRoute);
 
-router.use('/staffs', adminOnly, staffsRoutes)
+router.use("/products", productRoute);
 
-router.use('/customers', customersRoutes)
-
-router.use('/categories', categoriesRoutes)
-
-router.use('/brands', brandsRoutes)
-
-router.use('/products', productsRoutes)
-
-module.exports = router
+module.exports = router;

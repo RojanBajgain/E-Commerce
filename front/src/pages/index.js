@@ -1,6 +1,6 @@
-import * as Errors from "./errors"
-import * as Front from "./front"
-import * as Auth from "./auth"
-import { Dashboard } from "./profile/Dashboard"
+import { Error404 } from "./errors/Error404";
+import * as Front from "./front";
+import * as Auth from "./auth";
+import { Dashboard } from "./profile/Dashboard";
 
-export { Errors, Front, Auth, Dashboard }
+export { Error404, Front, Auth, Dashboard };

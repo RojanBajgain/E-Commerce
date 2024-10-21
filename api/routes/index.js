@@ -1,34 +1,30 @@
-const express = require('express')
-const AuthRoutes = require('./auth/auth.routes')
-const ProfileRoutes = require('./profile/profile.routes')
-const CmsRoutes = require('./cms')
-const FrontRoutes = require('./front')
-const { auth, cmsUser, CustomerOnly } = require('../lib')
-const { Profile } = require('../controllers')
+const express = require("express");
+const router = express.Router();
+const AuthRoutes = require("./auth/auth.routes");
+const CmsRoutes = require("./cms");
+const FrontRoutes = require("./front");
+const ProfileRoutes = require("./profile/profile.route");
+const { auth, cms, customerOnly } = require("../middleware");
+const { Profile } = require("../controllers");
 
-const router = express.Router()
+router.use("/auth", AuthRoutes);
+router.use("/cms", auth, cms, CmsRoutes);
+router.use("/profile", auth, ProfileRoutes);
+router.use(FrontRoutes);
 
-router.use('/auth', AuthRoutes)
+router.get("/image/:filename", (req, res, next) => {
+  res.sendFile(`uploads/${req.params.filename}`, {
+    root: "./",
+  });
+});
 
-router.use('/cms', auth, cmsUser, CmsRoutes)
-
-router.use('/profile', auth, ProfileRoutes)
-
-router.use(FrontRoutes)
-
-router.post('/checkout', auth, CustomerOnly, Profile.checkout)
-
-router.get('/image/:filename', (req, res, next) => {
-    res.sendFile(`uploads/${req.params.filename}`, {
-        root: './'
-    })
-})
-
+router.post("/checkout", auth, customerOnly, Profile.checkout);
 
 router.use((req, res, next) => {
-    res.status(404).json({
-        error: 'Resource not found'
-    })
-})
+  next({
+    status: 404,
+    message: "Resource not found",
+  });
+});
 
-module.exports = router
+module.exports = router;

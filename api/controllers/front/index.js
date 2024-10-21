@@ -1,4 +1,7 @@
-const Product = require('./product.controller')
-const List = require('./list.controller')
+const Product = require("./product.controller");
+const List = require("./list.controller");
 
-module.exports = { Product, List }
+module.exports = {
+  Product,
+  List,
+};
